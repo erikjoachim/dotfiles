@@ -1,0 +1,71 @@
+# config-dir=$USERPROFILE/AppData/Roaming/alacritty
+
+[general]
+working_directory = "$USERPROFILE"
+
+[window]
+# dimensions = { columns = 92, lines = 23 }
+# position = { x = 320, y = 150 }
+padding = { x = 18, y = 18 }
+title = "Alacritty"
+startup_mode = "Windowed"
+decorations = "Full"
+opacity = 1
+
+[scrolling]
+history = 65535
+
+[font]
+normal = { family = "MesloLGM Nerd Font", style = "Regular" }
+bold   = { family = "MesloLGM Nerd Font", style = "Bold" }
+italic = { family = "MesloLGM Nerd Font", style = "Italic" }
+bold_italic = { family = "MesloLGM Nerd Font", style = "Bold Italic" }
+size = 12.0
+
+[env]
+TERM = "xterm-256color"
+
+[colors]
+
+[colors.primary]
+
+[colors.cursor]
+text = "#1E1E2E"
+cursor = "#F5E0DC"
+
+[colors.search]
+matches = { foreground = "#000000", background = "#F38BA8" }
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+color = "#C0C5CE"
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape="Block", blinking="Always" }
+blink_interval = 500
+thickness = 0.25
+
+[terminal]
+shell = { program = "C:/Program Files/Git/bin/bash.exe", args = ["--login", "-i"] }
+
+[mouse]
+hide_when_typing = true
+bindings = [
+  { mouse = "Right", mods = "Control", action = "Paste" },
+]
+
+[keyboard]
+bindings = [
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Control", action = "Paste" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "+", mods = "Control", action = "IncreaseFontSize" }, 
+  { key = "-", mods = "Control", action = "DecreaseFontSize" },
+  { key = "W", mods = "Control", action = "Quit" },
+  { key = "N", mods = "Control|Shift", action = "CreateNewWindow"},
+  { key = "Back", mods = "Control", chars = "\u0017" }
+]
