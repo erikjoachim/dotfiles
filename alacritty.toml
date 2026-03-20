@@ -1,7 +1,5 @@
-# config-dir=$USERPROFILE/AppData/Roaming/alacritty
-
 [general]
-working_directory = "$USERPROFILE"
+working_directory = "<WORKING_DIRECTORY>"
 
 [window]
 # dimensions = { columns = 92, lines = 23 }
@@ -63,7 +61,7 @@ bindings = [
   { key = "C", mods = "Control|Shift", action = "Copy" },
   { key = "V", mods = "Control", action = "Paste" },
   { key = "V", mods = "Control|Shift", action = "Paste" },
-  { key = "+", mods = "Control", action = "IncreaseFontSize" }, 
+  { key = "+", mods = "Control", action = "IncreaseFontSize" },
   { key = "-", mods = "Control", action = "DecreaseFontSize" },
   { key = "W", mods = "Control", action = "Quit" },
   { key = "N", mods = "Control|Shift", action = "CreateNewWindow"},

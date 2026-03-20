@@ -9,7 +9,7 @@ alias rb="source ~/.bashrc && echo reloaded bashrc.."
 # ===========================
 alias cd.="cd .."
 alias cd..="cd .. && cd .."
-alias cdinit="cd </c/path/to/your/pref/projects/folder>"
+alias cdinit="cd <PERSONAL_PROJECTS_PATH>"
 alias exp="explorer ."
 
 # Colors
@@ -17,6 +17,7 @@ BLUE="\033[1;34m"
 GREEN="\033[1;32m"
 RESET="\033[0m"
 
+# 'ls' tree view
 lt() {
     for f in *; do
         if [ -d "$f" ]; then
@@ -27,6 +28,7 @@ lt() {
     done
 }
 
+# 'ls -a' tree view
 lta() {
     for f in .* *; do
         [ "$f" = "." ] || [ "$f" = ".." ] && continue

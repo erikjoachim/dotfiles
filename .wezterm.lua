@@ -41,10 +41,6 @@ config.keys = {
   },
 }
 
-wezterm.plugin
-  .require('https://github.com/yriveiro/wezterm-tabs')
-  .apply_to_config(config, { tabs = { tab_bar_at_bottom = true } })
-
 config.initial_cols = 80
 config.initial_rows = 30
 config.default_prog = { "C:\\Program Files\\Git\\bin\\bash.exe", "--login" }
