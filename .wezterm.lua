@@ -83,7 +83,7 @@ config.keys = {
   {
     key = "Backspace",
     mods = "CTRL",
-    action = wezterm.action.SendString("\x1b\x7f"),
+        action = wezterm.action.SendKey { key = 'w', mods = 'CTRL' },
   },
   -- Ctrl+C: Copy if text selected, otherwise send interrupt to process
   {
