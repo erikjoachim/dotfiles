@@ -100,29 +100,58 @@ config.keys = {
 }
 
 -- ============================================================
---  ICON MAPPING: Process name -> Nerd Font icon
+--  PROCESS CONFIG: Icon and friendly name for each process
 -- ============================================================
-local icons = {
-    ["debug"] = wezterm.nerdfonts.cod_debug_console,
-    ["bash"] = wezterm.nerdfonts.cod_terminal_bash,
-    ["cargo"] = wezterm.nerdfonts.dev_rust,
-    ["curl"] = wezterm.nerdfonts.md_waves,
-    ["docker"] = wezterm.nerdfonts.linux_docker,
-    ["docker-compose"] = wezterm.nerdfonts.linux_docker,
-    ["gh"] = wezterm.nerdfonts.dev_github_badge,
-    ["git"] = wezterm.nerdfonts.dev_git,
-    ["go"] = wezterm.nerdfonts.seti_go,
-    ["kubectl"] = wezterm.nerdfonts.linux_docker,
-    ["lua"] = wezterm.nerdfonts.seti_lua,
-    ["make"] = wezterm.nerdfonts.seti_makefile,
-    ["node"] = wezterm.nerdfonts.md_hexagon,
-    ["nvim"] = wezterm.nerdfonts.custom_vim,
-    ["sudo"] = wezterm.nerdfonts.fa_hashtag,
-    ["vim"] = wezterm.nerdfonts.dev_vim,
-    ["wget"] = wezterm.nerdfonts.md_arrow_down_box,
-    ["zsh"] = wezterm.nerdfonts.dev_terminal,
-    ["lazygit"] = wezterm.nerdfonts.dev_github_alt,
+local processes = {
+    ["debug"]       = { icon = wezterm.nerdfonts.cod_debug_console,   name = "debug" },
+    ["bash"]        = { icon = wezterm.nerdfonts.cod_terminal_bash,  name = "bash" },
+    ["bash.exe"]    = { icon = wezterm.nerdfonts.cod_terminal_bash,  name = "bash" },
+    ["cargo"]       = { icon = wezterm.nerdfonts.dev_rust,           name = "cargo" },
+    ["curl"]        = { icon = wezterm.nerdfonts.md_waves,           name = "curl" },
+    ["docker"]      = { icon = wezterm.nerdfonts.linux_docker,       name = "docker" },
+    ["docker.exe"]  = { icon = wezterm.nerdfonts.linux_docker,       name = "docker" },
+    ["gh"]          = { icon = wezterm.nerdfonts.dev_github_badge,   name = "gh" },
+    ["git"]         = { icon = wezterm.nerdfonts.dev_git,             name = "git" },
+    ["git.exe"]     = { icon = wezterm.nerdfonts.dev_git,             name = "git" },
+    ["go"]          = { icon = wezterm.nerdfonts.seti_go,             name = "go" },
+    ["kubectl.exe"] = { icon = wezterm.nerdfonts.linux_docker,       name = "kubectl" },
+    ["lua"]         = { icon = wezterm.nerdfonts.seti_lua,            name = "lua" },
+    ["make"]        = { icon = wezterm.nerdfonts.seti_makefile,      name = "make" },
+    ["node"]        = { icon = wezterm.nerdfonts.md_hexagon,         name = "node" },
+    ["node.exe"]    = { icon = wezterm.nerdfonts.md_hexagon,         name = "node" },
+    ["npm"]         = { icon = wezterm.nerdfonts.md_hexagon,         name = "npm" },
+    ["npx"]         = { icon = wezterm.nerdfonts.md_hexagon,         name = "npx" },
+    ["nvim"]        = { icon = wezterm.nerdfonts.custom_vim,         name = "nvim" },
+    ["nvim.exe"]    = { icon = wezterm.nerdfonts.custom_vim,         name = "nvim" },
+    ["opencode"]    = { icon = wezterm.nerdfonts.cod_code,            name = "opencode" },
+    ["oc"]          = { icon = wezterm.nerdfonts.cod_code,            name = "opencode" },
+    ["sudo"]        = { icon = wezterm.nerdfonts.fa_hashtag,         name = "sudo" },
+    ["vim"]         = { icon = wezterm.nerdfonts.dev_vim,            name = "vim" },
+    ["vim.exe"]     = { icon = wezterm.nerdfonts.dev_vim,            name = "vim" },
+    ["wget"]        = { icon = wezterm.nerdfonts.md_arrow_down_box,  name = "wget" },
+    ["zsh"]         = { icon = wezterm.nerdfonts.dev_terminal,       name = "zsh" },
+    ["lazygit"]     = { icon = wezterm.nerdfonts.dev_github_alt,     name = "lazygit" },
+    ["pwsh"]        = { icon = wezterm.nerdfonts.cod_terminal_powershell, name = "pwsh" },
+    ["powershell.exe"] = { icon = wezterm.nerdfonts.cod_terminal_powershell, name = "powershell" },
+    ["cmd.exe"]     = { icon = wezterm.nerdfonts.cod_terminal_cmd,    name = "cmd" },
+    ["python.exe"]  = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
+    ["python"]      = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
+    ["python3"]     = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
 }
+
+-- Helper to get process info
+local get_process_info = function(name)
+    local lower = string.lower(name)
+    if processes[lower] then
+        return processes[lower]
+    end
+    for key, proc in pairs(processes) do
+        if string.find(lower, key, 1, true) then
+            return proc
+        end
+    end
+    return { icon = '', name = name, keep_custom = false }
+end
 
 -- ============================================================
 --  POWERLINE SEPARATORS
@@ -155,19 +184,10 @@ local function tab_title(tab, max_width)
     local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
         or tab.active_pane.title
     local process, custom = parse_title(title)
-    local icon = ''
+    local proc_info = get_process_info(process)
+    local icon = proc_info.icon .. ' '
 
-    local proc = string.lower(process)
-
-    if icons[proc] then
-        icon = icons[proc] .. ' '
-    end
-
-    if custom ~= '' then
-        title = custom
-    end
-
-    title = wezterm.truncate_right(title, max_width - 3)
+    title = wezterm.truncate_right(proc_info.name, max_width - 3)
 
     return ' ' .. icon .. title .. ' '
 end
