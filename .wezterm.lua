@@ -14,8 +14,55 @@ config.color_schemes = {
     cursor_fg = "#000000",
     selection_bg = "#444444",
     selection_fg = "#ffffff",
-    ansi = {"#000000","#ff5555","#50fa7b","#f1fa8c","#bd93f9","#ff79c6","#8be9fd","#bbbbbb"},
-    brights = {"#555555","#ff5555","#50fa7b","#f1fa8c","#bd93f9","#ff79c6","#8be9fd","#ffffff"}
+    ansi = { "#000000", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#bbbbbb" },
+    brights = { "#555555", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#ffffff" },
+
+    -- === TOGGLE TAB BAR COLORS ===
+    -- These colors are used by the retro tab bar styling
+    -- =================================
+    tab_bar = {
+        background = "#1e1e1e",
+        active_tab = {
+            bg_color = "#bd93f9",
+            fg_color = "#1e1e1e",
+            intensity = "Normal",
+            italic = false,
+            strikethrough = false,
+            underline = "None",
+        },
+        inactive_tab = {
+            bg_color = "#1e1e1e",
+            fg_color = "#c0c0c0",
+            intensity = "Normal",
+            italic = false,
+            strikethrough = false,
+            underline = "None",
+        },
+        inactive_tab_hover = {
+            bg_color = "#2e2e2e",
+            fg_color = "#ffffff",
+            intensity = "Normal",
+            italic = true,
+            strikethrough = false,
+            underline = "None",
+        },
+        new_tab = {
+            bg_color = "#1e1e1e",
+            fg_color = "#c0c0c0",
+            intensity = "Normal",
+            italic = false,
+            strikethrough = false,
+            underline = "None",
+        },
+        new_tab_hover = {
+            bg_color = "#bd93f9",
+            fg_color = "#1e1e1e",
+            intensity = "Normal",
+            italic = false,
+            strikethrough = false,
+            underline = "None",
+        },
+    },
   }
 }
 
