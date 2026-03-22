@@ -134,6 +134,94 @@ local separators = {
     arrow_thin_right = '\u{e0b3}',
 }
 
+-- ============================================================
+--  TOGGLE ZOOM INDICATOR
+--  Set to false to disable zoom indicators in tabs
+-- ============================================================
+local ZOOM_INDICATOR_ENABLED = true
+
+-- ============================================================
+--  HELPER: Parse title to extract process name and custom title
+-- ============================================================
+local function parse_title(title)
+    local process, custom = title:match '^(%S+)%s*%-?%s*(.*)$'
+    return process or 'unknown', custom or ''
+end
+
+-- ============================================================
+--  HELPER: Get formatted tab title with icon
+-- ============================================================
+local function tab_title(tab, max_width)
+    local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
+        or tab.active_pane.title
+    local process, custom = parse_title(title)
+    local icon = ''
+
+    local proc = string.lower(process)
+
+    if icons[proc] then
+        icon = icons[proc] .. ' '
+    end
+
+    if custom ~= '' then
+        title = custom
+    end
+
+    title = wezterm.truncate_right(title, max_width - 3)
+
+    return ' ' .. icon .. title .. ' '
+end
+
+-- ============================================================
+--  HELPER: Get current tab index (1-based)
+-- ============================================================
+local function tab_current_idx(tabs, tab)
+    local idx = 0
+    for i, t in ipairs(tabs) do
+        if t.tab_id == tab.tab_id then
+            idx = i
+            break
+        end
+    end
+    return idx
+end
+
+-- ============================================================
+--  HELPER: Get tab metadata (index + zoom indicator)
+-- ============================================================
+local function tab_current_meta(idx, tab)
+    -- Early return if zoom indicator is disabled
+    if not ZOOM_INDICATOR_ENABLED then
+        return tostring(idx)
+    end
+
+    -- Get pane information
+    local mux_tab = wezterm.mux.get_tab(tab.tab_id)
+    local panes = mux_tab:panes_with_info()
+    local npanes = #panes
+
+    -- Early return for single pane
+    if npanes == 1 then
+        return tostring(idx)
+    end
+
+    -- Check for zoomed pane
+    local is_zoomed = false
+    for _, pane in ipairs(panes) do
+        if pane.is_zoomed then
+            is_zoomed = true
+            break
+        end
+    end
+
+    -- Show zoom indicator
+    if is_zoomed then
+        return '\u{f833}'  -- Nerd Font zoom icon
+    end
+
+    return tostring(idx)
+end
+
 config.initial_cols = 80
 config.initial_rows = 30
 config.default_prog = { "C:\\Program Files\\Git\\bin\\bash.exe", "--login" }
