@@ -222,6 +222,57 @@ local function tab_current_meta(idx, tab)
     return tostring(idx)
 end
 
+-- ============================================================
+--  FORMAT TAB TITLE: Main callback
+-- ============================================================
+wezterm.on('format-tab-title', function(tab, tabs, panes, wezterm_config, hover, max_width)
+    local active_bg = "#bd93f9"  -- Purple for active tab
+    local active_fg = "#1e1e1e"  -- Dark text
+    local inactive_bg = "#1e1e1e" -- Dark background
+    local inactive_fg = "#c0c0c0" -- Light text
+    local background = "#1e1e1e"   -- Tab bar background
+
+    local title = tab_title(tab, max_width)
+    local tab_idx = tab_current_idx(tabs, tab)
+    local tab_meta = tab_current_meta(tab_idx, tab)
+    local is_last = tab_idx == #tabs
+
+    local tab_text = string.format(' %s %s%s', tab_meta, separators.arrow_thin_left, title)
+
+    if tab.is_active then
+        -- ACTIVE TAB: Purple background with dark text
+        return {
+            { Background = { Color = active_bg } },
+            { Foreground = { Color = active_fg } },
+            { Attribute = { Intensity = "Bold" } },
+            { Text = tab_text },
+            { Background = { Color = background } },
+            { Foreground = { Color = active_bg } },
+            { Text = separators.arrow_solid_left },
+            { Background = { Color = is_last and background or inactive_bg } },
+            { Foreground = { Color = background } },
+            { Text = separators.arrow_solid_left },
+        }
+    else
+        -- INACTIVE TAB: Dark background with light text
+        local next_tab = tabs[tab_idx + 1]
+        local next_bg = is_last and background
+            or (next_tab and next_tab.is_active and active_bg or inactive_bg)
+
+        return {
+            { Background = { Color = inactive_bg } },
+            { Foreground = { Color = inactive_fg } },
+            { Text = tab_text },
+            { Background = { Color = background } },
+            { Foreground = { Color = inactive_bg } },
+            { Text = separators.arrow_solid_left },
+            { Background = { Color = next_bg } },
+            { Foreground = { Color = background } },
+            { Text = separators.arrow_solid_left },
+        }
+    end
+end)
+
 config.initial_cols = 80
 config.initial_rows = 30
 config.default_prog = { "C:\\Program Files\\Git\\bin\\bash.exe", "--login" }
