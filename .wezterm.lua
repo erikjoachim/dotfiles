@@ -99,6 +99,41 @@ config.keys = {
   },
 }
 
+-- ============================================================
+--  ICON MAPPING: Process name -> Nerd Font icon
+-- ============================================================
+local icons = {
+    ["debug"] = wezterm.nerdfonts.cod_debug_console,
+    ["bash"] = wezterm.nerdfonts.cod_terminal_bash,
+    ["cargo"] = wezterm.nerdfonts.dev_rust,
+    ["curl"] = wezterm.nerdfonts.md_waves,
+    ["docker"] = wezterm.nerdfonts.linux_docker,
+    ["docker-compose"] = wezterm.nerdfonts.linux_docker,
+    ["gh"] = wezterm.nerdfonts.dev_github_badge,
+    ["git"] = wezterm.nerdfonts.dev_git,
+    ["go"] = wezterm.nerdfonts.seti_go,
+    ["kubectl"] = wezterm.nerdfonts.linux_docker,
+    ["lua"] = wezterm.nerdfonts.seti_lua,
+    ["make"] = wezterm.nerdfonts.seti_makefile,
+    ["node"] = wezterm.nerdfonts.md_hexagon,
+    ["nvim"] = wezterm.nerdfonts.custom_vim,
+    ["sudo"] = wezterm.nerdfonts.fa_hashtag,
+    ["vim"] = wezterm.nerdfonts.dev_vim,
+    ["wget"] = wezterm.nerdfonts.md_arrow_down_box,
+    ["zsh"] = wezterm.nerdfonts.dev_terminal,
+    ["lazygit"] = wezterm.nerdfonts.dev_github_alt,
+}
+
+-- ============================================================
+--  POWERLINE SEPARATORS
+-- ============================================================
+local separators = {
+    arrow_solid_left = '\u{e0b0}',
+    arrow_solid_right = '\u{e0b2}',
+    arrow_thin_left = '\u{e0b1}',
+    arrow_thin_right = '\u{e0b3}',
+}
+
 config.initial_cols = 80
 config.initial_rows = 30
 config.default_prog = { "C:\\Program Files\\Git\\bin\\bash.exe", "--login" }
