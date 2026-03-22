@@ -5,8 +5,16 @@ git clone --depth 1 $repoUrl $tempDir
 if (-not $?) { exit 1 }
 Push-Location $tempDir
 
-# Bashrc
-if (Test-Path ".bashrc") {
+Write-Host "Select dotfiles to install:"
+Write-Host "  1) bashrc"
+Write-Host "  2) wezterm"
+Write-Host "  3) alacritty"
+Write-Host "  a) all"
+Write-Host "  (comma-separated for multiple, e.g. '1,3')"
+$selection = Read-Host "Selection"
+
+function Install-Bashrc {
+    if (-not (Test-Path ".bashrc")) { return }
     $dest = "$env:USERPROFILE\.bashrc"
     if (Test-Path $dest) { Move-Item $dest "$dest.bak" -Force }
     Copy-Item ".bashrc" $dest -Force
@@ -16,14 +24,15 @@ if (Test-Path ".bashrc") {
     }
 }
 
-# Wezterm
-$wezDest = "$env:USERPROFILE\.wezterm.lua"
-if (Test-Path ".wezterm.lua" -and -not (Test-Path $wezDest)) {
-    Copy-Item ".wezterm.lua" $wezDest -Force
+function Install-Wezterm {
+    if (-not (Test-Path ".wezterm.lua")) { return }
+    $dest = "$env:USERPROFILE\.wezterm.lua"
+    if (Test-Path $dest) { Move-Item $dest "$dest.bak" -Force }
+    Copy-Item ".wezterm.lua" $dest -Force
 }
 
-# Alacritty
-if (Test-Path "alacritty.toml") {
+function Install-Alacritty {
+    if (-not (Test-Path "alacritty.toml")) { return }
     $configDir = "$env:APPDATA\alacritty"
     if (-not (Test-Path $configDir)) { New-Item -ItemType Directory -Path $configDir -Force | Out-Null }
     $dest = "$configDir\alacritty.toml"
@@ -33,6 +42,16 @@ if (Test-Path "alacritty.toml") {
     if ($path) {
         (Get-Content $dest) -replace '<WORKING_DIRECTORY>', $path | Set-Content $dest
     }
+}
+
+if ($selection -match "a") {
+    Install-Bashrc
+    Install-Wezterm
+    Install-Alacritty
+} else {
+    if ($selection -match "1") { Install-Bashrc }
+    if ($selection -match "2") { Install-Wezterm }
+    if ($selection -match "3") { Install-Alacritty }
 }
 
 Pop-Location
