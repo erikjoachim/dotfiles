@@ -5,9 +5,17 @@ Configs for bash, wezterm, alacritty.
 ## Install
 
 One-liner:
+
+#### unix
+
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/erikjoachim/dotfiles/main/install.sh)  # unix
-irm https://raw.githubusercontent.com/erikjoachim/dotfiles/main/install.ps1 | iex  # windows
+bash <(curl -sL https://raw.githubusercontent.com/erikjoachim/dotfiles/main/install.sh)
+```
+
+#### windows
+
+```bash
+irm https://raw.githubusercontent.com/erikjoachim/dotfiles/main/install.ps1 | iex
 ```
 
 Or clone and run:
