@@ -5,7 +5,8 @@ working_directory = "<WORKING_DIRECTORY>"
 # dimensions = { columns = 92, lines = 23 }
 # position = { x = 320, y = 150 }
 padding = { x = 18, y = 18 }
-title = "Alacritty"
+title = "Alacritty | Bash"
+dynamic_title = false
 startup_mode = "Windowed"
 decorations = "Full"
 opacity = 1
