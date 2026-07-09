@@ -105,3 +105,8 @@ fi
 export PATH=$USERPROFILE/.opencode/bin:$PATH
 
 export PS1="[\[$(tput sgr0)\]\[\033[0;35m\]\u\[$(tput sgr0)\]][\[$(tput sgr0)\]\[\033[0;36m\]\A\[$(tput sgr0)\]][\[$(tput sgr0)\]\[\033[0;32m\\]\w\[$(tput sgr0)\]]\e[31m\]\`git_branch\`\n\[$(tput sgr0)\]\[\033[0;31m\]>>\[$(tput sgr0)\] : \[$(tput sgr0)\]"
+
+# cd to home if shell opened in a system directory
+case "$PWD" in
+  /c/WINDOWS*|/c/windows*) cd "$HOME" ;;
+esac
