@@ -85,12 +85,6 @@ config.keys = {
     mods = "CTRL",
         action = wezterm.action.SendKey { key = 'w', mods = 'CTRL' },
   },
-  -- Ctrl+C: Copy if text selected, otherwise send interrupt to process
-  {
-    key = "c",
-    mods = "CTRL",
-    action = wezterm.action.CopyTo("Clipboard"),
-  },
   -- Ctrl+V: Paste from clipboard
   {
     key = "v",
