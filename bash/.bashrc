@@ -9,7 +9,7 @@ alias rb="source ~/.bashrc && echo reloaded bashrc.."
 # ===========================
 alias cd.="cd .."
 alias cd..="cd .. && cd .."
-alias cdinit="cd <PERSONAL_PROJECTS_PATH>"
+alias cdinit="cd /c/projects/"
 alias exp="explorer ."
 
 # Colors
