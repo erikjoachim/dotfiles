@@ -63,7 +63,7 @@ bindings = [
   { key = "V", mods = "Control|Shift", action = "Paste" },
   { key = "+", mods = "Control", action = "IncreaseFontSize" },
   { key = "-", mods = "Control", action = "DecreaseFontSize" },
-  { key = "W", mods = "Control", action = "Quit" },
+  { key = "W", mods = "Control|Shift", action = "Quit" },
   { key = "N", mods = "Control|Shift", action = "CreateNewWindow"},
   { key = "Back", mods = "Control", chars = "\u0017" }
 ]
