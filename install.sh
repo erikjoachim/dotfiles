@@ -55,11 +55,12 @@ dry() {
 
 expand_path() {
     local path="$1"
-    # Expand ~ at start
-    case "$path" in
-        ~/*) path="$HOME/${path#~/}" ;;
-        ~)   path="$HOME" ;;
-    esac
+    # Expand ~ at start (case patterns don't expand tilde in MSYS2/Git Bash)
+    if [[ "$path" =~ ^~/(.*)$ ]]; then
+        path="$HOME/${BASH_REMATCH[1]}"
+    elif [[ "$path" == "~" ]]; then
+        path="$HOME"
+    fi
     # Expand %VARNAME% env vars
     while [[ "$path" =~ %([A-Za-z_][A-Za-z0-9_]*)% ]]; do
         local var="${BASH_REMATCH[1]}"
@@ -83,6 +84,15 @@ symlink_target() {
     local path="$1"
     if [[ -L "$path" ]]; then
         readlink "$path"
+    fi
+}
+
+create_symlink() {
+    local src="$1" dst="$2"
+    if [[ "$(get_platform)" == "windows" ]]; then
+        MSYS=winsymlinks:nativestrict ln -sf "$src" "$dst"
+    else
+        ln -sf "$src" "$dst"
     fi
 }
 
@@ -336,7 +346,7 @@ install_dotfile() {
 
     # Create symlink
     if ! dry; then
-        ln -s "$src" "$dst"
+        create_symlink "$src" "$dst"
         log LINK "Linked: $dst -> $src"
     else
         log DRY "Would link: $dst -> $src"

@@ -335,8 +335,16 @@ function Install-Dotfile {
 
     # Create symlink
     if (-not $WhatIf) {
-        New-Item -ItemType SymbolicLink -Path $DestPath -Target $SourcePath -Force | Out-Null
-        Write-Action "Linked: $DestPath -> $SourcePath" 'LINK'
+        try {
+            New-Item -ItemType SymbolicLink -Path $DestPath -Target $SourcePath -Force -ErrorAction Stop | Out-Null
+            Write-Action "Linked: $DestPath -> $SourcePath" 'LINK'
+        } catch {
+            Write-Action "Symlink creation failed: $($_.Exception.Message)" 'ERROR'
+            Write-Action "Try running PowerShell as Administrator, or enable Developer Mode in Windows Settings" 'INFO'
+            Write-Action "Falling back to copy: $SourcePath -> $DestPath" 'INFO'
+            Copy-Item -LiteralPath $SourcePath -Destination $DestPath -Force
+            Write-Action "Copied: $DestPath (not a symlink)" 'LINK'
+        }
     } else {
         Write-Action "Would link: $DestPath -> $SourcePath" 'DRY_RUN'
     }
