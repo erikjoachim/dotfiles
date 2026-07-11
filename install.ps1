@@ -5,13 +5,13 @@
 .DESCRIPTION
   Reads dotfiles.yaml and creates symlinks so each managed config
   file lives in the repo and is referenced from its normal application
-  path.  Backup files are renamed *.backup.YYYYMMDD.
+  path.
 .PARAMETER WhatIf
   Dry-run: show actions without making changes.
 .PARAMETER Verify
   Check every manifest entry, source file, and symlink.  Exit 1 on failure.
 .PARAMETER Uninstall
-  Remove managed symlinks and restore backups where available.
+  Remove managed symlinks.
 .EXAMPLE
   .\install.ps1
   .\install.ps1 -WhatIf
@@ -37,11 +37,9 @@ function Write-Action {
         INFO    = 'Cyan'
         OK      = 'Green'
         SKIP    = 'DarkYellow'
-        BACKUP  = 'Yellow'
         LINK    = 'Green'
         UNLINK  = 'Red'
         REMOVE  = 'Red'
-        RESTORE = 'Yellow'
         ERROR   = 'Red'
         DRY_RUN = 'Magenta'
     }
@@ -81,12 +79,6 @@ function Get-TargetFromSymlink {
         }
     } catch {}
     return $null
-}
-
-function Get-BackupPath {
-    param([string]$Path)
-    $stamp = Get-Date -Format 'yyyyMMdd'
-    return "$Path.backup.$stamp"
 }
 
 # ---------- YAML parser ----------
@@ -263,19 +255,6 @@ function Invoke-UninstallMode {
             } else {
                 Write-Action "WOULD REMOVE: $dst" 'DRY_RUN'
             }
-
-            # Restore backup if available
-            $backupPattern = "$dst.backup.*"
-            $backups = Get-ChildItem -LiteralPath (Split-Path $dst -Parent) -Filter "$(Split-Path $dst -Leaf).backup.*" -ErrorAction SilentlyContinue
-            if ($backups) {
-                $latest = $backups | Sort-Object Name -Descending | Select-Object -First 1
-                if (-not $WhatIf) {
-                    Rename-Item -LiteralPath $latest.FullName -NewName (Split-Path $dst -Leaf)
-                    Write-Action "RESTORED: $($latest.Name) -> $dst" 'RESTORE'
-                } else {
-                    Write-Action "WOULD RESTORE: $($latest.Name) -> $dst" 'DRY_RUN'
-                }
-            }
         } else {
             Write-Action "SKIP (symlink not pointing to repo): $dst -> $target" 'SKIP'
         }
@@ -322,13 +301,12 @@ function Install-Dotfile {
                 Write-Action "Would remove incorrect link: $DestPath" 'DRY_RUN'
             }
         } else {
-            # Regular file – back it up
-            $backup = Get-BackupPath $DestPath
+            # Regular file – remove it (repo is source of truth)
             if (-not $WhatIf) {
-                Rename-Item -LiteralPath $DestPath -NewName (Split-Path $backup -Leaf)
-                Write-Action "Backed up: $DestPath -> $backup" 'BACKUP'
+                Remove-Item -LiteralPath $DestPath -Force
+                Write-Action "Removed regular file: $DestPath" 'REMOVE'
             } else {
-                Write-Action "Would back up: $DestPath -> $backup" 'DRY_RUN'
+                Write-Action "Would remove regular file: $DestPath" 'DRY_RUN'
             }
         }
     }

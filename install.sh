@@ -19,12 +19,12 @@ while [[ $# -gt 0 ]]; do
         --dry-run) DRY_RUN=true  ; shift ;;
         --verify)  VERIFY=true   ; shift ;;
         --uninstall) UNINSTALL=true ; shift ;;
-        --help|-h)
-            echo "Usage: $0 [--dry-run] [--verify] [--uninstall]"
-            echo "  (no flag)   Normal install – create symlinks"
-            echo "  --dry-run   Show actions without making changes"
-            echo "  --verify    Check every entry; exit 1 on failure"
-            echo "  --uninstall Remove symlinks, restore backups"
+            --help|-h)
+                echo "Usage: $0 [--dry-run] [--verify] [--uninstall]"
+                echo "  (no flag)   Normal install – create symlinks"
+                echo "  --dry-run   Show actions without making changes"
+                echo "  --verify    Check every entry; exit 1 on failure"
+                echo "  --uninstall Remove managed symlinks"
             exit 0
             ;;
         *) echo "Unknown option: $1"; exit 1 ;;
@@ -38,11 +38,9 @@ log() {
         INFO)   echo -e "[INFO] $msg" ;;
         OK)     echo -e "[OK]   $msg" ;;
         SKIP)   echo -e "[SKIP] $msg" ;;
-        BACKUP) echo -e "[BACKUP] $msg" ;;
         LINK)   echo -e "[LINK] $msg" ;;
         UNLINK) echo -e "[UNLINK] $msg" ;;
         REMOVE) echo -e "[REMOVE] $msg" ;;
-        RESTORE) echo -e "[RESTORE] $msg" ;;
         ERROR)  echo -e "[ERROR] $msg" ;;
         DRY)    echo -e "[DRY]   $msg" ;;
         *)      echo -e "[$kind] $msg" ;;
@@ -271,20 +269,6 @@ uninstall_links() {
             else
                 log DRY "Would remove: $dst"
             fi
-
-            # Restore most recent backup
-            local parent="$(dirname "$dst")"
-            local base="$(basename "$dst")"
-            local latest_backup
-            latest_backup="$(ls -1 "$parent/${base}.backup."* 2>/dev/null | sort -r | head -1 || true)"
-            if [[ -n "$latest_backup" ]]; then
-                if ! dry; then
-                    mv "$latest_backup" "$dst"
-                    log RESTORE "Restored: $(basename "$latest_backup") -> $dst"
-                else
-                    log DRY "Would restore: $(basename "$latest_backup") -> $dst"
-                fi
-            fi
         else
             log SKIP "Symlink not pointing to repo: $dst -> $target"
         fi
@@ -331,15 +315,12 @@ install_dotfile() {
                 log DRY "Would remove incorrect link: $dst"
             fi
         else
-            # Regular file – back it up
-            local stamp
-            stamp="$(date +%Y%m%d)"
-            local backup_path="${dst}.backup.${stamp}"
+            # Regular file – remove it (repo is source of truth)
             if ! dry; then
-                mv "$dst" "$backup_path"
-                log BACKUP "Backed up: $dst -> $backup_path"
+                rm "$dst"
+                log REMOVE "Removed regular file: $dst"
             else
-                log DRY "Would back up: $dst -> $backup_path"
+                log DRY "Would remove regular file: $dst"
             fi
         fi
     fi

@@ -38,18 +38,10 @@ cd dotfiles
 
 | Action | Git Bash | PowerShell | Description |
 |--------|----------|-----------|-------------|
-| **install** | `./install.sh` | `.\install.ps1` | creates symlinks for every manifest entry matching current platform. existing files backed up as `<name>.backup.<YYYYMMDD>` before replacement. |
+| **install** | `./install.sh` | `.\install.ps1` | creates symlinks for every manifest entry matching current platform. |
 | **dry run** | `./install.sh --dry-run` | `.\install.ps1 -WhatIf` | reports every action without touching the filesystem. |
 | **verify** | `./install.sh --verify` | `.\install.ps1 -Verify` | checks all entries/sources/symlinks are correct. exit 0 on success, 1 on failure. |
-| **uninstall** | `./install.sh --uninstall` | `.\install.ps1 -Uninstall` | removes managed symlinks, restores newest backup. never removes repo files. |
-
-## backup behavior
-
-when a destination already contains a regular file (not a symlink),
-the installer renames it to `<filename>.backup.<YYYYMMDD>` before
-creating the symlink.
-
-on uninstall, the most recent backup is restored automatically.
+| **uninstall** | `./install.sh --uninstall` | `.\install.ps1 -Uninstall` | removes managed symlinks. never removes repo files. |
 
 ## troubleshooting
 

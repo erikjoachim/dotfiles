@@ -28,11 +28,10 @@ dotfiles:
 - `install.ps1` — PowerShell 5.1+, flags: `-WhatIf` `-Verify` `-Uninstall`
 - `install.sh` — Git Bash, flags: `--dry-run` `--verify` `--uninstall`
 - Bootstrap mode: if YAML missing, clone to `~/dotfiles` then install
-- Backup existing files as `<name>.backup.<YYYYMMDD>`
 - Idempotent: skip correct symlinks, repair broken/wrong links
 
 ## Key rules
 - Never copy files to destination — always symlink
-- Never delete user files — backup first
+- Never delete user files
 - `dotfiles.yaml` is the ONLY mapping — no hardcoded paths in installers
 - Expand `~` and `%VAR%` in target paths
