@@ -55,7 +55,9 @@ alias ga="git add"
 alias gaa="git add . && git status"
 alias gr="git restore"
 alias gcm="git commit -m"
-alias gcom="git commit"
+alias gci="git commit"
+alias gb="git branch"
+
 git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
