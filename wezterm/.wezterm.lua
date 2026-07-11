@@ -287,6 +287,10 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, wezterm_config, hover,
     end
 end)
 
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+    return "WezTerm"
+end)
+
 config.initial_cols = 80
 config.initial_rows = 30
 config.default_prog = { "C:\\Program Files\\Git\\bin\\bash.exe", "--login" }
