@@ -112,3 +112,6 @@ export PS1="[\[$(tput sgr0)\]\[\033[0;35m\]\u\[$(tput sgr0)\]][\[$(tput sgr0)\]\
 case "$PWD" in
   /c/WINDOWS*|/c/windows*) cd "$HOME" ;;
 esac
+
+# Pi
+export PATH="C:\Program Files\nodejs/bin:$PATH"
