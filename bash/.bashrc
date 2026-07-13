@@ -113,5 +113,8 @@ case "$PWD" in
   /c/WINDOWS*|/c/windows*) cd "$HOME" ;;
 esac
 
+# Kill visual bell flash (DECSCNM) on boundary keypresses
+bind 'set bell-style none'
+
 # Pi
 export PATH="C:\Program Files\nodejs/bin:$PATH"
