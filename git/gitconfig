@@ -1,0 +1,23 @@
+[user]
+        name = "username"
+        email = "email"
+        signingKey = ~/.ssh/id_rsa.pub
+
+[core]
+        editor = vim
+
+[init]
+        defaultBranch = main
+
+[gpg]
+        format = ssh
+
+# Windows
+[gpg "ssh"]
+        program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
+
+[commit]
+        gpgSign = true
+
+[tag]
+        gpgSign = true
