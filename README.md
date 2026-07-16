@@ -20,6 +20,10 @@ cd dotfiles
 ./install.sh
 ```
 
+> **repo location:** the repository can be cloned anywhere. Symlinks point from standard config locations (`~/.bashrc`, `%AppData%/...`) back to the repo's actual path.
+>
+> moving the repo later only requires re-running the installer to repair links.
+
 ### powershell (windows)
 
 > **one-liner**
@@ -28,7 +32,8 @@ cd dotfiles
 irm https://raw.githubusercontent.com/erikjoachim/dotfiles/main/install.ps1 | iex
 ```
 
->  **or from a local clone**
+> **or from a local clone**
+
 ```powershell
 cd dotfiles
 .\install.ps1
@@ -36,12 +41,12 @@ cd dotfiles
 
 ## Usage
 
-| Action | Git Bash | PowerShell | Description |
-|--------|----------|-----------|-------------|
-| **install** | `./install.sh` | `.\install.ps1` | creates symlinks for every manifest entry matching current platform. |
-| **dry run** | `./install.sh --dry-run` | `.\install.ps1 -WhatIf` | reports every action without touching the filesystem. |
-| **verify** | `./install.sh --verify` | `.\install.ps1 -Verify` | checks all entries/sources/symlinks are correct. exit 0 on success, 1 on failure. |
-| **uninstall** | `./install.sh --uninstall` | `.\install.ps1 -Uninstall` | removes managed symlinks. never removes repo files. |
+| Action        | Git Bash                   | PowerShell                 | Description                                                                       |
+| ------------- | -------------------------- | -------------------------- | --------------------------------------------------------------------------------- |
+| **install**   | `./install.sh`             | `.\install.ps1`            | creates symlinks for every manifest entry matching current platform.              |
+| **dry run**   | `./install.sh --dry-run`   | `.\install.ps1 -WhatIf`    | reports every action without touching the filesystem.                             |
+| **verify**    | `./install.sh --verify`    | `.\install.ps1 -Verify`    | checks all entries/sources/symlinks are correct. exit 0 on success, 1 on failure. |
+| **uninstall** | `./install.sh --uninstall` | `.\install.ps1 -Uninstall` | removes managed symlinks. never removes repo files.                               |
 
 ## troubleshooting
 
