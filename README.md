@@ -1,7 +1,6 @@
 # dotfiles
 
 configuration files managed via symbolic links.
-see [AGENTS.md](AGENTS.md) for repo conventions and manifest format.
 
 ## quick install
 
