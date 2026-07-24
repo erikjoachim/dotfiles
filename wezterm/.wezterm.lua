@@ -6,64 +6,64 @@ config.font_size = 11
 config.color_scheme = "CustomDark"
 
 config.color_schemes = {
-  ["CustomDark"] = {
-    foreground = "#c0c0c0",
-    background = "#1e1e1e",  -- dark gray background
-    cursor_bg = "#ffffff",
-    cursor_border = "#ffffff",
-    cursor_fg = "#000000",
-    selection_bg = "#444444",
-    selection_fg = "#ffffff",
-    ansi = { "#000000", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#bbbbbb" },
-    brights = { "#555555", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#ffffff" },
+    ["CustomDark"] = {
+        foreground = "#c0c0c0",
+        background = "#1e1e1e", -- dark gray background
+        cursor_bg = "#ffffff",
+        cursor_border = "#ffffff",
+        cursor_fg = "#000000",
+        selection_bg = "#444444",
+        selection_fg = "#ffffff",
+        ansi = { "#000000", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#bbbbbb" },
+        brights = { "#555555", "#ff5555", "#50fa7b", "#f1fa8c", "#bd93f9", "#ff79c6", "#8be9fd", "#ffffff" },
 
-    -- === TOGGLE TAB BAR COLORS ===
-    -- These colors are used by the retro tab bar styling
-    -- =================================
-    tab_bar = {
-        background = "#1e1e1e",
-        active_tab = {
-            bg_color = "#bd93f9",
-            fg_color = "#1e1e1e",
-            intensity = "Normal",
-            italic = false,
-            strikethrough = false,
-            underline = "None",
+        -- === TOGGLE TAB BAR COLORS ===
+        -- These colors are used by the retro tab bar styling
+        -- =================================
+        tab_bar = {
+            background = "#1e1e1e",
+            active_tab = {
+                bg_color = "#bd93f9",
+                fg_color = "#1e1e1e",
+                intensity = "Normal",
+                italic = false,
+                strikethrough = false,
+                underline = "None",
+            },
+            inactive_tab = {
+                bg_color = "#1e1e1e",
+                fg_color = "#c0c0c0",
+                intensity = "Normal",
+                italic = false,
+                strikethrough = false,
+                underline = "None",
+            },
+            inactive_tab_hover = {
+                bg_color = "#2e2e2e",
+                fg_color = "#ffffff",
+                intensity = "Normal",
+                italic = true,
+                strikethrough = false,
+                underline = "None",
+            },
+            new_tab = {
+                bg_color = "#1e1e1e",
+                fg_color = "#c0c0c0",
+                intensity = "Normal",
+                italic = false,
+                strikethrough = false,
+                underline = "None",
+            },
+            new_tab_hover = {
+                bg_color = "#bd93f9",
+                fg_color = "#1e1e1e",
+                intensity = "Normal",
+                italic = false,
+                strikethrough = false,
+                underline = "None",
+            },
         },
-        inactive_tab = {
-            bg_color = "#1e1e1e",
-            fg_color = "#c0c0c0",
-            intensity = "Normal",
-            italic = false,
-            strikethrough = false,
-            underline = "None",
-        },
-        inactive_tab_hover = {
-            bg_color = "#2e2e2e",
-            fg_color = "#ffffff",
-            intensity = "Normal",
-            italic = true,
-            strikethrough = false,
-            underline = "None",
-        },
-        new_tab = {
-            bg_color = "#1e1e1e",
-            fg_color = "#c0c0c0",
-            intensity = "Normal",
-            italic = false,
-            strikethrough = false,
-            underline = "None",
-        },
-        new_tab_hover = {
-            bg_color = "#bd93f9",
-            fg_color = "#1e1e1e",
-            intensity = "Normal",
-            italic = false,
-            strikethrough = false,
-            underline = "None",
-        },
-    },
-  }
+    }
 }
 
 -- ============================================================
@@ -79,58 +79,58 @@ config.unzoom_on_switch_pane = true
 --  KEYBINDINGS
 -- ============================================================
 config.keys = {
-  -- Ctrl+Backspace deletes previous word
-  {
-    key = "Backspace",
-    mods = "CTRL",
+    -- Ctrl+Backspace deletes previous word
+    {
+        key = "Backspace",
+        mods = "CTRL",
         action = wezterm.action.SendKey { key = 'w', mods = 'CTRL' },
-  },
-  -- Ctrl+V: Paste from clipboard
-  {
-    key = "v",
-    mods = "CTRL",
-    action = wezterm.action.PasteFrom("Clipboard"),
-  },
+    },
+    -- Ctrl+V: Paste from clipboard
+    {
+        key = "v",
+        mods = "CTRL",
+        action = wezterm.action.PasteFrom("Clipboard"),
+    },
 }
 
 -- ============================================================
 --  PROCESS CONFIG: Icon and friendly name for each process
 -- ============================================================
 local processes = {
-    ["debug"]       = { icon = wezterm.nerdfonts.cod_debug_console,   name = "debug" },
-    ["bash"]        = { icon = wezterm.nerdfonts.cod_terminal_bash,  name = "bash" },
-    ["bash.exe"]    = { icon = wezterm.nerdfonts.cod_terminal_bash,  name = "bash" },
-    ["cargo"]       = { icon = wezterm.nerdfonts.dev_rust,           name = "cargo" },
-    ["curl"]        = { icon = wezterm.nerdfonts.md_waves,           name = "curl" },
-    ["docker"]      = { icon = wezterm.nerdfonts.linux_docker,       name = "docker" },
-    ["docker.exe"]  = { icon = wezterm.nerdfonts.linux_docker,       name = "docker" },
-    ["gh"]          = { icon = wezterm.nerdfonts.dev_github_badge,   name = "gh" },
-    ["git"]         = { icon = wezterm.nerdfonts.dev_git,             name = "git" },
-    ["git.exe"]     = { icon = wezterm.nerdfonts.dev_git,             name = "git" },
-    ["go"]          = { icon = wezterm.nerdfonts.seti_go,             name = "go" },
-    ["kubectl.exe"] = { icon = wezterm.nerdfonts.linux_docker,       name = "kubectl" },
-    ["lua"]         = { icon = wezterm.nerdfonts.seti_lua,            name = "lua" },
-    ["make"]        = { icon = wezterm.nerdfonts.seti_makefile,      name = "make" },
-    ["node"]        = { icon = wezterm.nerdfonts.md_hexagon,         name = "node" },
-    ["node.exe"]    = { icon = wezterm.nerdfonts.md_hexagon,         name = "node" },
-    ["npm"]         = { icon = wezterm.nerdfonts.md_hexagon,         name = "npm" },
-    ["npx"]         = { icon = wezterm.nerdfonts.md_hexagon,         name = "npx" },
-    ["nvim"]        = { icon = wezterm.nerdfonts.custom_vim,         name = "nvim" },
-    ["nvim.exe"]    = { icon = wezterm.nerdfonts.custom_vim,         name = "nvim" },
-    ["opencode"]    = { icon = wezterm.nerdfonts.cod_code,            name = "opencode" },
-    ["oc"]          = { icon = wezterm.nerdfonts.cod_code,            name = "opencode" },
-    ["sudo"]        = { icon = wezterm.nerdfonts.fa_hashtag,         name = "sudo" },
-    ["vim"]         = { icon = wezterm.nerdfonts.dev_vim,            name = "vim" },
-    ["vim.exe"]     = { icon = wezterm.nerdfonts.dev_vim,            name = "vim" },
-    ["wget"]        = { icon = wezterm.nerdfonts.md_arrow_down_box,  name = "wget" },
-    ["zsh"]         = { icon = wezterm.nerdfonts.dev_terminal,       name = "zsh" },
-    ["lazygit"]     = { icon = wezterm.nerdfonts.dev_github_alt,     name = "lazygit" },
-    ["pwsh"]        = { icon = wezterm.nerdfonts.cod_terminal_powershell, name = "pwsh" },
+    ["debug"]          = { icon = wezterm.nerdfonts.cod_debug_console, name = "debug" },
+    ["bash"]           = { icon = wezterm.nerdfonts.cod_terminal_bash, name = "bash" },
+    ["bash.exe"]       = { icon = wezterm.nerdfonts.cod_terminal_bash, name = "bash" },
+    ["cargo"]          = { icon = wezterm.nerdfonts.dev_rust, name = "cargo" },
+    ["curl"]           = { icon = wezterm.nerdfonts.md_waves, name = "curl" },
+    ["docker"]         = { icon = wezterm.nerdfonts.linux_docker, name = "docker" },
+    ["docker.exe"]     = { icon = wezterm.nerdfonts.linux_docker, name = "docker" },
+    ["gh"]             = { icon = wezterm.nerdfonts.dev_github_badge, name = "gh" },
+    ["git"]            = { icon = wezterm.nerdfonts.dev_git, name = "git" },
+    ["git.exe"]        = { icon = wezterm.nerdfonts.dev_git, name = "git" },
+    ["go"]             = { icon = wezterm.nerdfonts.seti_go, name = "go" },
+    ["kubectl.exe"]    = { icon = wezterm.nerdfonts.linux_docker, name = "kubectl" },
+    ["lua"]            = { icon = wezterm.nerdfonts.seti_lua, name = "lua" },
+    ["make"]           = { icon = wezterm.nerdfonts.seti_makefile, name = "make" },
+    ["node"]           = { icon = wezterm.nerdfonts.md_hexagon, name = "node" },
+    ["node.exe"]       = { icon = wezterm.nerdfonts.md_hexagon, name = "node" },
+    ["npm"]            = { icon = wezterm.nerdfonts.md_hexagon, name = "npm" },
+    ["npx"]            = { icon = wezterm.nerdfonts.md_hexagon, name = "npx" },
+    ["nvim"]           = { icon = wezterm.nerdfonts.custom_vim, name = "nvim" },
+    ["nvim.exe"]       = { icon = wezterm.nerdfonts.custom_vim, name = "nvim" },
+    ["opencode"]       = { icon = wezterm.nerdfonts.cod_code, name = "opencode" },
+    ["oc"]             = { icon = wezterm.nerdfonts.cod_code, name = "opencode" },
+    ["sudo"]           = { icon = wezterm.nerdfonts.fa_hashtag, name = "sudo" },
+    ["vim"]            = { icon = wezterm.nerdfonts.dev_vim, name = "vim" },
+    ["vim.exe"]        = { icon = wezterm.nerdfonts.dev_vim, name = "vim" },
+    ["wget"]           = { icon = wezterm.nerdfonts.md_arrow_down_box, name = "wget" },
+    ["zsh"]            = { icon = wezterm.nerdfonts.dev_terminal, name = "zsh" },
+    ["lazygit"]        = { icon = wezterm.nerdfonts.dev_github_alt, name = "lazygit" },
+    ["pwsh"]           = { icon = wezterm.nerdfonts.cod_terminal_powershell, name = "pwsh" },
     ["powershell.exe"] = { icon = wezterm.nerdfonts.cod_terminal_powershell, name = "powershell" },
-    ["cmd.exe"]     = { icon = wezterm.nerdfonts.cod_terminal_cmd,    name = "cmd" },
-    ["python.exe"]  = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
-    ["python"]      = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
-    ["python3"]     = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
+    ["cmd.exe"]        = { icon = wezterm.nerdfonts.cod_terminal_cmd, name = "cmd" },
+    ["python.exe"]     = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
+    ["python"]         = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
+    ["python3"]        = { icon = wezterm.nerdfonts.mdi_language_python, name = "python" },
 }
 
 -- Helper to get process info
@@ -230,7 +230,7 @@ local function tab_current_meta(idx, tab)
 
     -- Show zoom indicator
     if is_zoomed then
-        return '\u{f833}'  -- Nerd Font zoom icon
+        return '\u{f833}' -- Nerd Font zoom icon
     end
 
     return tostring(idx)
@@ -240,11 +240,11 @@ end
 --  FORMAT TAB TITLE: Main callback
 -- ============================================================
 wezterm.on('format-tab-title', function(tab, tabs, panes, wezterm_config, hover, max_width)
-    local active_bg = "#bd93f9"  -- Purple for active tab
-    local active_fg = "#1e1e1e"  -- Dark text
+    local active_bg = "#bd93f9"   -- Purple for active tab
+    local active_fg = "#1e1e1e"   -- Dark text
     local inactive_bg = "#1e1e1e" -- Dark background
     local inactive_fg = "#c0c0c0" -- Light text
-    local background = "#1e1e1e"   -- Tab bar background
+    local background = "#1e1e1e"  -- Tab bar background
 
     local title = tab_title(tab, max_width)
     local tab_idx = tab_current_idx(tabs, tab)
