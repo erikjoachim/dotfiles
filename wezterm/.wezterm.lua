@@ -168,7 +168,7 @@ local ZOOM_INDICATOR_ENABLED = true
 -- ============================================================
 local function parse_title(title)
     local process, custom = title:match '^(%S+)%s*%-?%s*(.*)$'
-    return process or 'unknown', custom or ''
+    return process or 'bash', custom or ''
 end
 
 -- ============================================================
