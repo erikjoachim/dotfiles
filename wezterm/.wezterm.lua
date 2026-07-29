@@ -177,8 +177,19 @@ end
 local function tab_title(tab, max_width)
     local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
         or tab.active_pane.title
-    local process = parse_title(title)
-    local proc_info = get_process_info(process)
+
+    local proc_info = nil
+    local fg_name = tab.active_pane.foreground_process_name
+    if fg_name then
+        local exe = fg_name:match("([^/\\]+)$")
+        proc_info = get_process_info(exe or fg_name)
+    end
+
+    if not proc_info or proc_info.name == 'bash' then
+        local process = parse_title(title)
+        proc_info = get_process_info(process)
+    end
+
     local icon = proc_info.icon .. ' '
 
     title = wezterm.truncate_right(proc_info.name, max_width - 3)
