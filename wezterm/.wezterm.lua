@@ -79,17 +79,23 @@ config.unzoom_on_switch_pane = true
 --  KEYBINDINGS
 -- ============================================================
 config.keys = {
-    -- Ctrl+Backspace deletes previous word
-    {
-        key = "Backspace",
-        mods = "CTRL",
-        action = wezterm.action.SendKey { key = 'w', mods = 'CTRL' },
-    },
     -- Ctrl+V: Paste from clipboard
     {
         key = "v",
         mods = "CTRL",
         action = wezterm.action.PasteFrom("Clipboard"),
+    },
+    -- Ctrl+W: Close current tab
+    {
+        key = "w",
+        mods = "CTRL",
+        action = wezterm.action.CloseCurrentTab,
+    },
+    -- Ctrl+Shift+W: Close entire window (all tabs)
+    {
+        key = "w",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.CloseCurrentWindow,
     },
 }
 
