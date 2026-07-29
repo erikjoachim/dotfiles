@@ -144,7 +144,7 @@ local get_process_info = function(name)
             return proc
         end
     end
-    return { icon = '', name = name, keep_custom = false }
+    return { icon = wezterm.nerdfonts.cod_terminal_bash, name = 'bash' }
 end
 
 -- ============================================================
@@ -167,8 +167,8 @@ local ZOOM_INDICATOR_ENABLED = true
 --  HELPER: Parse title to extract process name and custom title
 -- ============================================================
 local function parse_title(title)
-    local process, custom = title:match '^(%S+)%s*%-?%s*(.*)$'
-    return process or 'bash', custom or ''
+    local process = title:match '^(%S+)%s*%-?%s*(.*)$'
+    return process or 'bash'
 end
 
 -- ============================================================
@@ -177,7 +177,7 @@ end
 local function tab_title(tab, max_width)
     local title = (tab.tab_title and #tab.tab_title > 0) and tab.tab_title
         or tab.active_pane.title
-    local process, custom = parse_title(title)
+    local process = parse_title(title)
     local proc_info = get_process_info(process)
     local icon = proc_info.icon .. ' '
 
