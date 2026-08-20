@@ -79,6 +79,12 @@ config.unzoom_on_switch_pane = true
 --  KEYBINDINGS
 -- ============================================================
 config.keys = {
+    -- Ctrl + Backspace: Delete previous word
+    {
+        key = 'Backspace',
+        mods = 'CTRL',
+        action = wezterm.action.SendString('\x17'),
+    },
     -- Ctrl+V: Paste from clipboard
     {
         key = "v",
