@@ -43,10 +43,10 @@ lta() {
 # ===========================
 # Git Aliases & functions
 # ===========================
-alias gh="git log --pretty=format:'%C(yellow)[%ad]%C(reset) %C(green)[%h]%C(reset) | %C(red)%s %C(bold red){{%an}}%C(reset) %C(blue)%d%C(reset)' --graph --date=short"
-alias gh2="git log --graph --pretty=format:'%C(auto)%h %s%C(reset)' --abbrev-commit"
-alias gh-premium="git log --graph --abbrev-commit --decorate --pretty=format:'%C(auto)%h%C(reset) %C(bold)%s%C(reset)%C(dim white) · %an%C(reset)%C(yellow)%d%C(reset)'"
-alias gh-dates="git log --graph --abbrev-commit --decorate --date=short --pretty=format:'%C(auto)%h%C(reset) %C(white)%s%C(reset) %C(dim white)%ad%C(reset)%C(yellow)%d%C(reset)'"
+alias gl="git log --pretty=format:'%C(yellow)[%ad]%C(reset) %C(green)[%h]%C(reset) | %C(red)%s %C(bold red){{%an}}%C(reset) %C(blue)%d%C(reset)' --graph --date=short"
+alias gl2="git log --graph --pretty=format:'%C(auto)%h %s%C(reset)' --abbrev-commit"
+alias gl-premium="git log --graph --abbrev-commit --decorate --pretty=format:'%C(auto)%h%C(reset) %C(bold)%s%C(reset)%C(dim white) · %an%C(reset)%C(yellow)%d%C(reset)'"
+alias gl-dates="git log --graph --abbrev-commit --decorate --date=short --pretty=format:'%C(auto)%h%C(reset) %C(white)%s%C(reset) %C(dim white)%ad%C(reset)%C(yellow)%d%C(reset)'"
 alias gs="git status"
 alias gd="git diff"
 alias gp="git pull"
