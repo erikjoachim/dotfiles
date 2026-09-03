@@ -9,6 +9,7 @@ alias rb="source ~/.bashrc && echo reloaded bashrc.."
 # ===========================
 alias cd.="cd .."
 alias cd..="cd .. && cd .."
+alias ..="cd .."
 alias cdinit="cd /c/projects/"
 alias exp="explorer ."
 
