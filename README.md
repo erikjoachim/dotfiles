@@ -47,7 +47,29 @@ cd dotfiles
 | **verify**    | `./install.sh --verify`    | `.\install.ps1 -Verify`    | checks all entries/sources/symlinks are correct. exit 0 on success, 1 on failure. |
 | **uninstall** | `./install.sh --uninstall` | `.\install.ps1 -Uninstall` | removes managed symlinks. never removes repo files.                               |
 
+## ssh agent (`ssa`) + git identities
+
+details live in [`git/README.md`](git/README.md). short form:
+
+```bash
+ssa            # personal keys (default)
+ssa work       # all work keys: GitHub + Azure DevOps
+ssa all        # both sets
+```
+
+directory selects git identity (`/c/projects/work/*` → work, `/c/projects/personal/*` → personal, else personal default). repo ships routing only, zero secrets. machine-local identity files created once from `git/gitconfig-*.example` templates.
+
+> first install symlinks `~/.ssh/config` and `~/.gitconfig` —
+> back up existing files first (`.backup-dotfiles` suffix).
+> local overrides: `~/.ssh/config.local`, `~/.gitconfig.local`.
+
 ## troubleshooting
+
+### "Error connecting to agent: No such file or directory" from `ssa`
+
+stale agent env fixed in current `.bashrc`: reload with `source ~/.bashrc`
+(or open fresh tab) and run `ssa` again. old code only started agent when
+`SSH_AUTH_SOCK` empty; new code probes `ssh-add -l` and purges dead sockets.
 
 ### "access denied" creating symlinks
 

@@ -1,167 +1,123 @@
-# Setup git + SSH for auth & verified commits — multi-service
+# Git + SSH profiles — personal / work, multi-service
 
-## Prerequisites
+Chain: directory → `includeIf` → identity → SSH host alias → key.
+`ssa` preloads keys. SSH config enforces selection.
 
-- Git 2.34+
-- OpenSSH client
+## Key rule
 
-## 1. Generate SSH keys — one per service
+One key per trust boundary, reused across services:
 
-```bash
-ssh-keygen -t ed25519 -C "github-personal"  -f ~/.ssh/github-personal
-ssh-keygen -t ed25519 -C "gitlab-personal"  -f ~/.ssh/gitlab-personal
-ssh-keygen -t ed25519 -C "azdevops-personal" -f ~/.ssh/azdevops-personal
-ssh-keygen -t ed25519 -C "azdevops-work"    -f ~/.ssh/azdevops-work
-```
+| Key                          | Scope                                       |
+| ---------------------------- | ------------------------------------------- |
+| `~/.ssh/id_ed25519_personal` | all personal services                       |
+| `~/.ssh/id_ed25519_work`     | GitHub work + Azure DevOps work             |
+| `~/.ssh/id_ed25519_<org>`    | exception only — org mandates dedicated key |
 
-## 2. Add keys to services
-
-Copy key: `cat ~/.ssh/<key>.pub` (or `type` on Windows CMD)
-
-Add each `.pub` to its service with these capabilities:
-
-- **GitHub** → Settings → SSH and GPG keys → New → check both **Authentication** + **Signing**
-- **GitLab** → Settings → SSH Keys → Usage → **Authentication & Signing**
-- **Azure DevOps** → User settings → SSH public keys → type: `authentication-signing`
-
-## 3. Create dir layout
-
-```
-c:/projects/personal/github/
-c:/projects/personal/gitlab/
-c:/projects/personal/azdevops/
-c:/projects/work/azdevops/
-# or ~/src/personal/..., ~/src/work/...
-```
-
-Clone repos into matching dirs.
-
-## 4. Create `~/.ssh/config`
-
-```ini
-Host github.com
-    IdentityFile ~/.ssh/github-personal
-
-Host gitlab.com
-    IdentityFile ~/.ssh/gitlab-personal
-
-Host ssh.dev.azure.com
-    IdentityFile ~/.ssh/azdevops-personal
-```
-
-- Personal + work both on Azure DevOps? Use `Match` blocks or skip `~/.ssh/config` and use `core.sshCommand` per include (step 6).
-
-## 5. Create per-service git includes
-
-**`~/.gitconfig-personal-github`**
-```ini
-[user]
-    name = "Your Name"
-    signingKey = ~/.ssh/github-personal.pub
-```
-
-**`~/.gitconfig-personal-gitlab`**
-```ini
-[user]
-    name = "Your Name"
-    signingKey = ~/.ssh/gitlab-personal.pub
-```
-
-**`~/.gitconfig-personal-azdevops`**
-```ini
-[user]
-    name = "Your Name"
-    signingKey = ~/.ssh/azdevops-personal.pub
-```
-
-**`~/.gitconfig-work-azdevops`**
-```ini
-[user]
-    name = "Your Name"
-    signingKey = ~/.ssh/azdevops-work.pub
-[core]
-    sshCommand = ssh -i ~/.ssh/azdevops-work
-```
-
-`core.sshCommand` in the work include handles auth key routing when `~/.ssh/config` can't distinguish personal vs work Azure DevOps on the same host.
-
-## 6. Create `~/.gitconfig`
-
-```ini
-[user]
-    email = "your@email.com"
-
-[core]
-    editor = vim
-
-[init]
-    defaultBranch = main
-
-[gpg]
-    format = ssh
-
-[gpg "ssh"]
-    program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
-
-[commit]
-    gpgSign = true
-
-[tag]
-    gpgSign = true
-
-[includeIf "gitdir:C:/projects/personal/github/"]
-    path = ~/.gitconfig-personal-github
-
-[includeIf "gitdir:C:/projects/personal/gitlab/"]
-    path = ~/.gitconfig-personal-gitlab
-
-[includeIf "gitdir:C:/projects/personal/azdevops/"]
-    path = ~/.gitconfig-personal-azdevops
-
-[includeIf "gitdir:C:/projects/work/azdevops/"]
-    path = ~/.gitconfig-work-azdevops
-```
-
-Adjust `gitdir:` paths to match step 3 layout. Use `C:/...` on Windows, `~/...` on Linux/macOS.
-
-## 7. Verify
+Legacy names still work as candidates: `~/.ssh/githubssh`, `~/.ssh/github-work`.
+Separate per-service keys on same laptop add files, zero security.
 
 ```bash
-# Auth
-cd c:/projects/personal/github/some-repo
-git fetch
+ssh-keygen -t ed25519 -C "personal" -f ~/.ssh/id_ed25519_personal
+ssh-keygen -t ed25519 -C "work"     -f ~/.ssh/id_ed25519_work
+```
 
-# Signing
+Register each `.pub` in its services with auth + signing:
+
+- **GitHub** → Settings → SSH and GPG keys → New → **Authentication** + **Signing**
+- **Azure DevOps** → User settings → SSH public keys → `authentication-signing`
+
+## Dir layout
+
+```
+/c/projects/personal/<repo>   # or ~/projects/personal/
+/c/projects/work/<repo>       # or ~/projects/work/
+```
+
+Flat legacy dirs (`/c/projects/<repo>`) inherit personal default. No rewrites needed.
+
+## SSH aliases (`ssh/config`, managed)
+
+```bash
+git clone git@github-personal:<org>/<repo>.git
+git clone git@github-work:<org>/<repo>.git
+git clone git@azure-work:v3/<org>/<project>/<repo>   # Azure DevOps
+```
+
+Per-machine extras (never committed): `~/.ssh/config.local`, `~/.ssh/config.d/*.conf`.
+
+## Agent (`ssa`, from `bash/.bashrc`)
+
+```bash
+ssa                  # personal (default)
+ssa work             # all work keys: GitHub + ADO
+ssa all              # both sets
+ssa ~/.ssh/my-key    # explicit path
+```
+
+Persists via `~/.ssh/agent.env`. Stale sockets recycled automatically.
+Overrides: `SSA_PERSONAL_KEYS`, `SSA_WORK_KEYS`, `SSA_AGENT_ENV`.
+
+## Git identities (secret-free, repo is public)
+
+Committed `git/gitconfig` holds routing only — zero emails. Machine-local files:
+
+| File                    | Content                           | When          |
+| ----------------------- | --------------------------------- | ------------- |
+| `~/.gitconfig.local`    | default (personal) identity       | always        |
+| `~/.gitconfig-work`     | work identity + work url rewrites | work machines |
+| `~/.gitconfig-personal` | personal url rewrites             | optional      |
+
+Setup:
+
+```bash
+cp git/gitconfig-local.example ~/.gitconfig.local         # fill personal email
+cp git/gitconfig-work.example ~/.gitconfig-work           # work machines only
+cp git/gitconfig-personal.example ~/.gitconfig-personal   # optional
+```
+
+Work scope rewrites `git@github.com:` → `git@github-work:` and
+`git@ssh.dev.azure.com:` → `git@azure-work:` — existing checkouts
+authenticate as work with zero remote edits. Personal-only machines keep
+`work`/`personal` stubs empty; routing dormant, default holds.
+
+Routing (in committed base, `gitdir/i` covers `/c/` + `C:/` spellings):
+
+| Directory                                         | File                    |
+| ------------------------------------------------- | ----------------------- |
+| `/c/projects/work/*`, `~/projects/work/*`         | `~/.gitconfig-work`     |
+| `/c/projects/personal/*`, `~/projects/personal/*` | `~/.gitconfig-personal` |
+| everything else                                   | `~/.gitconfig.local`    |
+
+## Verify
+
+```bash
+# routing
+git -C /c/projects/work/<repo> config --show-origin --get user.email
+git -C /c/projects/personal/<repo> config --show-origin --get-regexp 'url.*insteadOf'
+
+# ssh
+ssh -G github-work | grep -Ei '^(hostname|identityfile)'
+ssh -G azure-work | grep -Ei '^(hostname|identityfile)'
+
+# agent
+ssa work && ssh-add -l
+
+# signing
 git commit --allow-empty -m "test signed commit"
-git log --show-signature -1
-# → "Good "git" signature"
-
-# Push
-git push
-
-# Check UI — commit shows "Verified" badge
+git log --show-signature -1   # → Good "git" signature, Verified badge in UI
 ```
 
 ## Troubleshooting
 
-| Symptom | Fix |
-|---|---|
-| `Permission denied (publickey)` | Wrong auth key. Run `ssh -vT git@github.com` to see what's offered. Fix `~/.ssh/config`. |
-| `signingkey must not be a pem file` | Use `.pub` path, not private key |
-| `gpg: failed to sign the data` | Check `gpg.format = ssh` and `gpg.ssh.program` path |
-| Commit not "Verified" on GitHub | Key added as **Signing Key**? (not just Auth) |
-| Commit not "Verified" on GitLab | Key Usage set to **Signing**? |
-| Commit not "Verified" on Azure DevOps | Key type set to `signing` or `authentication-signing`? |
-| `includeIf` not loading | `git config --show-origin --get user.signingKey` inside repo |
-| Windows path issues | Use `C:/...` forward slashes in gitconfig |
-
-## Company machine notes
-
-- `gpg.ssh.program` path may differ — run `where ssh-keygen`
-- `~/.ssh/config` may be locked — use `core.sshCommand` in includes
-- HTTPS-only clone policy? You can still sign with SSH keys; auth via Git Credential Manager
-- Cert-based SSH org? Auth works via cert, but `signingKey` is still your `.pub` file. Verify with IT
-
-## Reference: `git/gitconfig` in this repo
-
-Minimal single-service template (personal GitHub). Copy the `[gpg]`, `[commit]`, `[tag]` blocks into `~/.gitconfig` above.
+| Symptom                              | Fix                                                                                 |
+| ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `Permission denied (publickey)`      | `ssh -vT git@github-work` — check offered key. Fix `~/.ssh/config`.                 |
+| `Error connecting to agent`          | `source ~/.bashrc`, fresh tab, `ssa` again. Stale socket auto-purged.               |
+| `includeIf` not loading              | Must run inside repo — outside repos `gitdir` never matches. Check `--show-origin`. |
+| Windows path issues                  | Patterns use `gitdir/i:` + both `/c/` and `C:/` spellings.                          |
+| `signingkey must not be a pem file`  | Use `.pub` path, not private key.                                                   |
+| `gpg: failed to sign the data`       | Check `gpg.format = ssh`, `gpg.ssh.program` path (`where ssh-keygen`).              |
+| Commit not Verified (GitHub)         | Key added as **Signing**, not just Auth.                                            |
+| Commit not Verified (ADO)            | Key type `signing` or `authentication-signing`?                                     |
+| `~/.ssh/config` locked (company box) | Put `core.sshCommand = ssh -i <key>` in the scope file instead.                     |
+| HTTPS-only clone policy              | Sign with SSH keys anyway; auth via Git Credential Manager.                         |

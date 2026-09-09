@@ -1,0 +1,12 @@
+# Template for ~/.gitconfig.local (MACHINE-LOCAL, never commit).
+# Setup: cp git/gitconfig-local.example ~/.gitconfig.local, then fill email.
+# Default identity. Covers every dir, including flat legacy /c/projects/* clones.
+
+[user]
+        name = Your Name
+        email = you-personal@example.com
+        signingKey = ~/.ssh/githubssh.pub
+
+# Optional: default remote rewrites for personal GitHub.
+# [url "git@github-personal:"]
+#         insteadOf = git@github.com:

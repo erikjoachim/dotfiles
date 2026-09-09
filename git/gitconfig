@@ -1,7 +1,11 @@
-[user]
-        name = "username"
-        email = "email"
-        signingKey = ~/.ssh/id_rsa.pub
+# Managed by dotfiles repo (git/gitconfig). Do not edit ~/.gitconfig directly.
+# Zero identity in this file — repo is public. Secrets live in machine-local
+# files (never committed), created once from the .example templates:
+#   ~/.gitconfig.local    — default identity (personal). Covers every dir.
+#   ~/.gitconfig-work     — work identity + work url rewrites.
+#   ~/.gitconfig-personal — personal url rewrites (optional).
+# Setup: cp git/gitconfig-*.example ~/.<name> and fill in emails.
+# Layout: /c/projects/personal/* and /c/projects/work/* (~/projects/* covered too).
 
 [core]
         editor = vim
@@ -12,7 +16,7 @@
 [gpg]
         format = ssh
 
-# Windows
+# Windows (Git Bash uses Win32 OpenSSH for signing)
 [gpg "ssh"]
         program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
 
@@ -21,3 +25,25 @@
 
 [tag]
         gpgSign = true
+
+# Default identity first — scoped includes below override it per directory.
+[include]
+        path = ~/.gitconfig.local
+
+# Work scope: personal default replaced by work identity + rewrites.
+# Both spellings: Git for Windows canonicalizes /c/... to C:/... — pattern
+# must match canonical form or include silently never fires.
+[includeIf "gitdir/i:/c/projects/work/"]
+        path = ~/.gitconfig-work
+[includeIf "gitdir/i:C:/projects/work/"]
+        path = ~/.gitconfig-work
+[includeIf "gitdir/i:~/projects/work/"]
+        path = ~/.gitconfig-work
+
+# Personal scope: url rewrites only (identity already default).
+[includeIf "gitdir/i:/c/projects/personal/"]
+        path = ~/.gitconfig-personal
+[includeIf "gitdir/i:C:/projects/personal/"]
+        path = ~/.gitconfig-personal
+[includeIf "gitdir/i:~/projects/personal/"]
+        path = ~/.gitconfig-personal

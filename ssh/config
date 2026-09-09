@@ -1,0 +1,41 @@
+# Managed by dotfiles repo (ssh/config). Do not edit ~/.ssh/config directly.
+# Per-machine overrides (not committed):
+#   ~/.ssh/config.local       — single local file
+#   ~/.ssh/config.d/*.conf    — drop-in snippets
+Include ~/.ssh/config.d/*.conf
+Include ~/.ssh/config.local
+
+# Personal GitHub: clone as git@github-personal:<org>/<repo>.git
+Host github-personal
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/githubssh
+    IdentityFile ~/.ssh/id_ed25519_personal
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+
+# Work GitHub: clone as git@github-work:<org>/<repo>.git
+Host github-work
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github-work
+    IdentityFile ~/.ssh/id_ed25519_work
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+
+# Work Azure DevOps: clone as git@azure-work:v3/<org>/<project>/<repo>
+Host azure-work
+    HostName ssh.dev.azure.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_work
+    IdentityFile ~/.ssh/github-work
+    IdentityFile ~/.ssh/azure-devops-work
+    IdentityFile ~/.ssh/id_ed25519_azure_work
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+
+# Fallback: auto-add whichever key authenticates (no forced identity)
+Host github.com
+    HostName github.com
+    User git
+    AddKeysToAgent yes

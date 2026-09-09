@@ -1,0 +1,17 @@
+# Template for ~/.gitconfig-work (MACHINE-LOCAL, never commit).
+# Setup: cp git/gitconfig-work.example ~/.gitconfig-work, then fill email.
+# Applies to /c/projects/work/* and ~/projects/work/* via includeIf.
+
+[user]
+        name = Your Name
+        email = you-work@example.com
+        signingKey = ~/.ssh/github-work.pub
+
+# Route GitHub work remotes through the work SSH alias (existing checkouts
+# using git@github.com: URLs keep working, authenticated as work identity).
+[url "git@github-work:"]
+        insteadOf = git@github.com:
+
+# Route Azure DevOps SSH remotes through the work ADO alias.
+[url "git@azure-work:"]
+        insteadOf = git@ssh.dev.azure.com:

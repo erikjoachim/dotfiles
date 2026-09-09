@@ -22,3 +22,9 @@ dotfiles:
   - source: bash/.bashrc
     target: ~/.bashrc
     platforms: [windows, linux, macos]
+
+  - source: ssh/config
+    target: ~/.ssh/config
+
+  - source: git/gitconfig
+    target: ~/.gitconfig

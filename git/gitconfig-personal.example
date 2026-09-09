@@ -1,0 +1,7 @@
+# Template for ~/.gitconfig-personal (MACHINE-LOCAL, never commit).
+# Setup: cp git/gitconfig-personal.example ~/.gitconfig-personal.
+# Applies to /c/projects/personal/* and ~/projects/personal/* via includeIf.
+# Identity already default (see ~/.gitconfig.local). Only url rewrites here.
+
+[url "git@github-personal:"]
+        insteadOf = git@github.com:
