@@ -28,3 +28,7 @@ dotfiles:
 
   - source: git/gitconfig
     target: ~/.gitconfig
+
+  - source: vim/.vimrc
+    target: ~/.vimrc
+    platforms: [windows, linux, macos]
